@@ -7,8 +7,15 @@
 #include <arpa/inet.h>
 #include <string.h>
 
+#define peticiones 5
+
 int main(int argc, char const *argv[])
 {
+
+    int numpuerto = 8080;
+    if(argc > 1){
+        numpuerto = atoi(argv[1]);
+    }
     //declarar variables
     int sockservidor, sockcliente; //los sockets tanto del servidor como del cliente
     struct sockaddr_in direccionserv, direccioncliente; //las direcciones del servidor y del cliente (struct sockaddr_in)
@@ -24,13 +31,13 @@ int main(int argc, char const *argv[])
     // Inicializar direccionserv
     direccionserv.sin_family = AF_INET; // familia de direcciones
     direccionserv.sin_addr.s_addr = htonl(INADDR_ANY); //cualquier ip
-    direccionserv.sin_port = htons(8080); // puerto del servidor
+    direccionserv.sin_port = htons(numpuerto); // puerto del servidor
 
     if(bind(sockservidor, (struct sockaddr *) &direccionserv, sizeof(direccionserv)) < 0){ //asignamos la direccion al socket
         perror("No se pudo asignar direccion"); 
         exit(EXIT_FAILURE);
     }
-    if(listen(sockservidor, 5) < 0){ //escuchamos el socket
+    if(listen(sockservidor, peticiones) < 0){ //escuchamos el socket
         perror("No se pudo escuchar el socket");
         exit(EXIT_FAILURE);
     }
@@ -52,7 +59,7 @@ int main(int argc, char const *argv[])
             perror("No se pudo enviar el mensaje");
             exit(EXIT_FAILURE);
         } //enviamos el mensaje
-
+        //%zd es para mostrar el tamaño de un size_t
         printf("Numero de bytes enviados: %lu\n", strlen(mensaje)); //mostramos el numero de bytes enviados
 
         close(sockcliente); //cerramos el socket del cliente

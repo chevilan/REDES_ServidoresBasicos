@@ -12,7 +12,7 @@
 
 
 int main(int argc, char **argv){
-    char ipservidor[MAX];
+    char ipservidor[MAX] = "127.0.0.1";
     int numpuerto = 8080;
     if(argc > 2){
         strcpy(ipservidor,argv[1]);
@@ -42,13 +42,10 @@ int main(int argc, char **argv){
         exit(EXIT_FAILURE);
     }
     // sleep(3);
-    if(recv(sockservidor, mensaje,MAX,0) < 0){
-        perror("\nNo se pudo recibir el mensaje\n");
-        exit(EXIT_FAILURE);
-    }else{
-        printf("\nMensaje recibido: %s\n", mensaje);
+    int n;
+    while(n=recv(sockservidor, mensaje,50,0) > 0){
+            printf("\nMensaje recibido: %s\n", mensaje);
     }
-
     close(sockservidor);
 
    return 0;

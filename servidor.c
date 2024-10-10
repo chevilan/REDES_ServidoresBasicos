@@ -54,8 +54,8 @@ int main(int argc, char const *argv[])
             printf("IP del cliente: %s\n", ip);
         }
         printf("El puerto es %d\n", ntohs(direccioncliente.sin_port)); //mostramos el puerto del cliente
-
-        if(send(sockcliente, mensaje, strlen(mensaje), 0) < 0){
+        ssize_t enviados;
+        if(enviados=send(sockcliente, mensaje, strlen(mensaje), 0) < 0){
             perror("No se pudo enviar el mensaje");
             exit(EXIT_FAILURE);
         } //enviamos el mensaje

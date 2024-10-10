@@ -20,7 +20,8 @@ int main(int argc, char const *argv[])
     int sockservidor, sockcliente; //los sockets tanto del servidor como del cliente
     struct sockaddr_in direccionserv, direccioncliente; //las direcciones del servidor y del cliente (struct sockaddr_in)
     socklen_t tamano; //el tamaño de la direccion del cliente
-    char* mensaje = "Hola cliente!\n\n"; //mensaje a enviar
+    char* mensaje1 = "Hola cliente! Este es el primer mensaje\n"; //mensaje a enviar
+    char* mensaje2 = "Este es el segundo mensaje...\n";
 
     sockservidor = socket(AF_INET, SOCK_STREAM, 0); //creamos el socket del servidor
     if(sockservidor < 0){ //si es menor que 0 (-1) da error
@@ -55,12 +56,16 @@ int main(int argc, char const *argv[])
         }
         printf("El puerto es %d\n", ntohs(direccioncliente.sin_port)); //mostramos el puerto del cliente
         ssize_t enviados;
-        if(enviados=send(sockcliente, mensaje, strlen(mensaje), 0) < 0){
+        if(enviados=send(sockcliente, mensaje1, strlen(mensaje1), 0) < 0){
+            perror("No se pudo enviar el mensaje");
+            exit(EXIT_FAILURE);
+        } 
+        if(enviados=send(sockcliente, mensaje2, strlen(mensaje2), 0) < 0){
             perror("No se pudo enviar el mensaje");
             exit(EXIT_FAILURE);
         } //enviamos el mensaje
         //%zd es para mostrar el tamaño de un size_t
-        printf("Numero de bytes enviados: %lu\n", strlen(mensaje)); //mostramos el numero de bytes enviados
+        printf("Numero de bytes enviados: %lu\n", strlen(mensaje1)+strlen(mensaje2)); //mostramos el numero de bytes enviados
 
         close(sockcliente); //cerramos el socket del cliente
     }

@@ -7,7 +7,7 @@
 #include <netinet/in.h>
 
 
-#define MAX 50
+#define MAX 100
 #define peticiones 5
 
 
@@ -41,7 +41,7 @@ int main(int argc, char **argv){
         perror("\nNo se pudo conectar al servidor\n");
         exit(EXIT_FAILURE);
     }
-
+    // sleep(3);
     if(recv(sockservidor, mensaje,MAX,0) < 0){
         perror("\nNo se pudo recibir el mensaje\n");
         exit(EXIT_FAILURE);

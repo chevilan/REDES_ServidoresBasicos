@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/socket.h>
+#include <string.h>
 //#include <sys/types.h>
 #include <unistd.h>
 #include <arpa/inet.h>
@@ -18,9 +19,9 @@ int main(int argc, char **argv){
         strcpy(ipservidor,argv[1]);
         numpuerto = atoi(argv[2]);
     }
-    int socketCliente, sockservidor;
-    struct sockaddr_in dirCliente, dirservidor;
-    socklen_t tamano;
+    int sockservidor;
+    struct sockaddr_in dirservidor;
+    //socklen_t tamano;
     char mensaje[MAX];
 
 
@@ -43,7 +44,7 @@ int main(int argc, char **argv){
     }
     // sleep(3);
     int n;
-    while(n=recv(sockservidor, mensaje,50,0) > 0){
+    while((n=recv(sockservidor, mensaje,50,0)) > 0){
             printf("\nMensaje recibido: %s\n", mensaje);
     }
     close(sockservidor);

@@ -56,11 +56,13 @@ int main(int argc, char const *argv[])
         }
         printf("El puerto es %d\n", ntohs(direccioncliente.sin_port)); //mostramos el puerto del cliente
         ssize_t enviados;
-        if(enviados=send(sockcliente, mensaje1, strlen(mensaje1), 0) < 0){
+        enviados = send(sockcliente, mensaje1, strlen(mensaje1), 0);
+        if(enviados < 0){
             perror("No se pudo enviar el mensaje");
             exit(EXIT_FAILURE);
         } 
-        if(enviados=send(sockcliente, mensaje2, strlen(mensaje2), 0) < 0){
+        enviados=send(sockcliente, mensaje2, strlen(mensaje2), 0);
+        if(enviados < 0){
             perror("No se pudo enviar el mensaje");
             exit(EXIT_FAILURE);
         } //enviamos el mensaje

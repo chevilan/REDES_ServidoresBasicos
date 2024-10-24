@@ -13,7 +13,7 @@
 
 
 int main(int argc, char **argv){
-    char ipservidor[MAX] = "127.0.0.1";
+    char ipservidor[MAX] = "127.0.0.1"; // Ip y puerto por defecto
     int numpuerto = 8080;
     if(argc > 2){
         strcpy(ipservidor,argv[1]);

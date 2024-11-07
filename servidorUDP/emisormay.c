@@ -51,7 +51,7 @@ int main(int argc, char **argv) {
     ssize_t n;
 
     // Crear el socket
-    if ((socketServidor = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+    if ((socketServidor = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
         perror("Error al abrir el socket");
         fclose(fileIN);
         fclose(fileOUT);
@@ -72,24 +72,13 @@ int main(int argc, char **argv) {
         exit(EXIT_FAILURE);
     }
 
-    // Conectar al servidor
-    if (connect(socketServidor, (struct sockaddr *) &dirServidor, sizeof(dirServidor)) < 0) {
-        perror("No se pudo conectar al servidor");
-        fclose(fileIN);
-        fclose(fileOUT);
-        close(socketServidor);
-        exit(EXIT_FAILURE);
-    }
-
-    printf("Conectado al servidor %s en el puerto %d\n", ipservidor, numpuerto);
-
     // Bucle para leer líneas del archivo de entrada, enviarlas al servidor y escribir la respuesta en el archivo de salida
     while (fgets(lineaIN, LINEAMAX, fileIN)) { // Lee una línea del archivo de entrada
         printf("Leyendo línea: %s", lineaIN);
         sleep(3); // Espera 3 segundos
 
         // Enviar la línea al servidor
-        if (send(socketServidor, lineaIN, strlen(lineaIN), 0) < 0) {
+        if (sendto(socketServidor, lineaIN, strlen(lineaIN),0, (struct sockaddr *) &dirServidor,sizeof(dirServidor)) < 0) {
             perror("No se pudo enviar el mensaje");
             fclose(fileIN);
             fclose(fileOUT);
@@ -99,7 +88,8 @@ int main(int argc, char **argv) {
         printf("\nLínea enviada: %s", lineaIN);
 
         // Recibir la respuesta del servidor
-        n = recv(socketServidor, lineaOUT, LINEAMAX, 0);
+        socklen_t lenDirServidor = sizeof(dirServidor);
+        n = recvfrom(socketServidor, lineaOUT, LINEAMAX, 0,(struct sockaddr *) &dirServidor,&lenDirServidor);
         if (n < 0) {
             perror("No se pudo recibir el mensaje");
             fclose(fileIN);
